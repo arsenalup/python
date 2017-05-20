@@ -3,11 +3,17 @@ import re
 import requests
 import time
 from bs4 import BeautifulSoup
+import threading
+import time
+import os
 
 
 class Spider(object):
     def __init__(self):
         self.siteURL = 'http://jandan.net/ooxx/page-'
+        if not os.path.exists('E:\jiandan'):
+            os.makedirs('E:\jiandan')
+
 
     def getSource(self,url):
         user_agent = 'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36'
@@ -34,18 +40,18 @@ class Spider(object):
             print 'save',fileName
             f.close()
 
-    def getAllPage(self, start, end):
-            number = int(start)
-            for page in range(int(start), int(end) + 1):
-                print '\ndownloading', number, 'page...'
-                detailURL = self.siteURL +str(page)
-                self.saveDetailPage(detailURL, number)
-                time.sleep(2)
-                number += 1
-            if number == int(end) + 1:
-                print 'sucessful'
-                return False
-
 spider = Spider()
-spider.getAllPage(start=raw_input('input start:'), end=raw_input('input end page:'))
-e=input('end')
+start_time = time.time()
+start=raw_input('input start:')
+end=raw_input('input end page:')
+number = int(start)
+for page in range(int(start), int(end) + 1):
+    print '\ndownloading', page, 'page...'
+    detailURL = 'http://jandan.net/ooxx/page-'+str(page)
+    try:
+        threading.Thread(target=spider.saveDetailPage, args=(detailURL, page)).start()
+    except TypeError:
+        print('数据异常,爬取失败')
+    end_time = time.time()
+    print('总共耗时%.2fs' % (end_time-start_time))
+    print 'sucessful'
