@@ -28,7 +28,7 @@ def song_list(keywords):
 def save_song(song_id):
     url='http://music.163.com/api/playlist/detail?id={}&updateTime=-1'
     for i in song_id:
-        print 'save list',i
+        print ('save list',i)
         url=url.format(i)
         req = requests.post(url,  headers=headers)
         content = req.json()
@@ -40,7 +40,7 @@ def save_lyric():
         for track in song['tracks']:
             song_id=track['id']
             url=url.format(song_id)
-            print 'savd lyric',song_id
+            print ('savd lyric',song_id)
             req = requests.post(url, headers=headers)
             content = req.json()
             db_lyrics.update_one({'id':song_id},{'$set':content},upsert=True)
