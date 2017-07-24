@@ -30,6 +30,6 @@ def walk_dir_and_resize(path):
                 print(f_new_name)
                 resize_pic(path=path_dst, new_path=f_new_name)
 
-if __name__ == '__main__':
+if __name__ == '__main__': 
     walk_dir_and_resize('./')
 
